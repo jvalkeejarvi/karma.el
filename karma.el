@@ -5,7 +5,7 @@
 ;; Author: Samuel Tonini
 ;; Maintainer: Samuel Tonini
 ;; URL: http://github.com/tonini/karma.el
-;; Version: 0.3.0
+;; Version: 0.4.0
 ;; Package-Requires: ((pkg-info "0.4") (emacs "24"))
 ;; Keywords: language, javascript, js, karma, testing
 

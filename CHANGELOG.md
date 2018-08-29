@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.4.0
+
+### Enhancements
+
+  * add function that allows user to jump to spec file related to current buffers file
+
 ## v0.3.0
 
 ### Enhancements
