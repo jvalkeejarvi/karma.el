@@ -90,6 +90,9 @@
 (defvar karma-buffers-to-ask-saving-for "[^*]*\.\\(js\\|html\\)"
   "Buffers name of which match this regexp will be asked to save before running tests")
 
+(defvar karma-spec-file-extension ".spec.js"
+  "Extension of test files")
+
 (defun karma--flatten (alist)
   (cond ((null alist) nil)
         ((atom alist) (list alist))
@@ -265,6 +268,11 @@ Argument BUFFER-NAME for the compilation."
     (when buffer
       (pop-to-buffer buffer))))
 
+(defun karma-open-related-spec-file ()
+  (interactive)
+  (find-file (concat (file-name-sans-extension buffer-file-name) karma-spec-file-extension))
+  )
+
 (defvar karma-mode-map
   (let ((map (make-sparse-keymap)))
     (define-key map (kbd "C-c , t") 'karma-start)
@@ -273,6 +281,7 @@ Argument BUFFER-NAME for the compilation."
     (define-key map (kbd "C-c , r") 'karma-run)
     (define-key map (kbd "C-c , p") 'karma-pop-to-start-buffer)
     (define-key map (kbd "C-c , c") 'karma-run-current-test)
+    (define-key map (kbd "C-c , j") 'karma-open-related-spec-file)
     map)
   "The keymap used when `karma-mode' is active.")
 
