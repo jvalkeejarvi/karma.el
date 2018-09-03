@@ -213,16 +213,14 @@ Argument BUFFER-NAME for the compilation."
     (end-of-line)
     (re-search-backward "^\\s-*[xf]?\\(describe\\|it\\)(")
     (let ((line (thing-at-point 'line t)))
-      (string-match "\\(?:\"\\(.*\\)\"\\|'\\(.*\\)'\\)" line)
-      (let ((match1 (match-string 1 line))
-            (match2 (match-string 2 line))
+      (string-match "\\(\"\\(.*\\)\"\\|'\\(.*\\)'\\)" line)
+      (let ((match1 (match-string 2 line))
+            (match2 (match-string 3 line))
             )
         (if match1
             match1
           (if match2
               match2
-            (message "NOT FOUND")
-            nil
             )
           )
         )
@@ -234,11 +232,13 @@ Argument BUFFER-NAME for the compilation."
   "Run `karma run` for current describe/it"
   (interactive)
   (let ((current-spec (get-current-spec)))
-    (when current-spec
+    (if current-spec
       (karma-execute (list "run"
                            (karma-config-file-path))
                      karma-run-buffer-name
                      (format "--grep=\"%s\"" current-spec))
+
+      (message "%s" (propertize "Couldn't find current it/describe" 'face '(:foreground "red")))
       )
     )
   )
