@@ -1,5 +1,6 @@
 [![License GPL 3][badge-license]](http://www.gnu.org/licenses/gpl-3.0.txt)
 [![Build Status](https://travis-ci.org/jvalkeejarvi/karma.el.png)](https://travis-ci.org/jvalkeejarvi/karma.el)
+[![Coverage Status](https://coveralls.io/repos/github/jvalkeejarvi/karma.el/badge.svg?branch=master)](https://coveralls.io/github/jvalkeejarvi/karma.el?branch=master)
 [![MELPA](http://melpa.org/packages/karma-badge.svg)](http://melpa.org/#/karma)
 [![MELPA Stable](http://stable.melpa.org/packages/karma-badge.svg)](http://stable.melpa.org/#/karma)
 
