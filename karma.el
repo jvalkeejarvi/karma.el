@@ -87,6 +87,9 @@
 (defvar karma-run-buffer-name "*karma run*"
   "Name of the karma run output buffer.")
 
+(defvar karma-buffers-to-ask-saving-for "[^*]*\.\\(js\\|html\\)"
+  "Buffers name of which match this regexp will be asked to save before running tests")
+
 (defun karma--flatten (alist)
   (cond ((null alist) nil)
         ((atom alist) (list alist))
@@ -148,7 +151,7 @@
 
 (defvar karma-buffer--save-buffers-predicate
   (lambda ()
-    (not (string= (substring (buffer-name) 0 1) "*"))))
+    (string-match karma-buffers-to-ask-saving-for (buffer-name)))) ;
 
 (defun karma-buffer--handle-compilation-once ()
   (remove-hook 'compilation-filter-hook 'karma-buffer--handle-compilation-once t)
