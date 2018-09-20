@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.3.0
+
+### Enhancements
+
+  * allow running individual test using karma --grep option
+  * add variable for filenames to ask saving for
+
 ## v0.2.0-dev (unreleased)
 
 ### Enhancements
