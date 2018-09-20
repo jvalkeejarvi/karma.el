@@ -161,22 +161,30 @@
 (defun karma-buffer--handle-compilation ()
   (ansi-color-apply-on-region (point-min) (point-max)))
 
-(defun karma-compilation-run (cmdlist buffer-name)
+(defun karma-compilation-run (cmdlist buffer-name &optional client-cmd-list)
   "Run CMDLIST in `buffer-name'.
 Returns the compilation buffer.
 Argument BUFFER-NAME for the compilation."
   (save-some-buffers (not compilation-ask-about-save) karma-buffer--save-buffers-predicate)
   (let* ((karma-buffer--buffer-name buffer-name)
-         (compilation-filter-start (point-min)))
+         (compilation-filter-start (point-min))
+         (command-to-run (add-client-cmd-to-list (mapconcat 'shell-quote-argument cmdlist " ") client-cmd-list)))
     (with-current-buffer
-        (compilation-start (mapconcat 'shell-quote-argument cmdlist " ")
-                           'karma-buffer-mode
-                           (lambda (b) karma-buffer--buffer-name))
+      (compilation-start command-to-run
+                         'karma-buffer-mode
+                         (lambda (b) karma-buffer--buffer-name))
       (setq-local compilation-error-regexp-alist-alist
                   (cons karma-buffer--error-link-options compilation-error-regexp-alist-alist))
       (setq-local compilation-error-regexp-alist (cons 'karma compilation-error-regexp-alist))
       (add-hook 'compilation-filter-hook 'karma-buffer--handle-compilation nil t)
       (add-hook 'compilation-filter-hook 'karma-buffer--handle-compilation-once nil t))))
+
+(defun add-client-cmd-to-list (cmd &optional client-cmd-list)
+  (if client-cmd-list
+    (concat cmd " -- " client-cmd-list)
+    cmd
+    )
+  )
 
 (defun karma-start ()
   "Run `karma start CONFIG-FILE`."
@@ -196,6 +204,42 @@ Argument BUFFER-NAME for the compilation."
   (karma-execute (list "start" (karma-config-file-path) "--no-single-run")
                  karma-start-buffer-name))
 
+(defun get-current-spec ()
+  (interactive)
+  (save-excursion
+    (end-of-line)
+    (re-search-backward "^\\s-*[xf]?\\(describe\\|it\\)(")
+    (let ((line (thing-at-point 'line t)))
+      (string-match "\\(?:\"\\(.*\\)\"\\|'\\(.*\\)'\\)" line)
+      (let ((match1 (match-string 1 line))
+            (match2 (match-string 2 line))
+            )
+        (if match1
+            match1
+          (if match2
+              match2
+            (message "NOT FOUND")
+            nil
+            )
+          )
+        )
+      )
+    )
+  )
+
+(defun karma-run-current-test ()
+  "Run `karma run` for current describe/it"
+  (interactive)
+  (let ((current-spec (get-current-spec)))
+    (when current-spec
+      (karma-execute (list "run"
+                           (karma-config-file-path))
+                     karma-run-buffer-name
+                     (format "--grep=\"%s\"" current-spec))
+      )
+    )
+  )
+
 (defun karma-run ()
   "Run `karma run`"
   (interactive)
@@ -206,13 +250,13 @@ Argument BUFFER-NAME for the compilation."
   (string-match-p "\\\(_spec\\|_test\\)\.\\(js\\|coffee\\)$"
                   (file-name-nondirectory (buffer-file-name))))
 
-(defun karma-execute (cmdlist buffer-name)
+(defun karma-execute (cmdlist buffer-name &optional client-cmd-list)
   "Run a karma command."
   (let ((old-directory default-directory))
     (karma--establish-root-directory)
     (message default-directory)
     (karma-compilation-run (karma--build-runner-cmdlist (list (karma-command) cmdlist))
-                           buffer-name)
+                           buffer-name client-cmd-list)
     (cd old-directory)))
 
 (defun karma-pop-to-start-buffer ()
@@ -228,7 +272,7 @@ Argument BUFFER-NAME for the compilation."
     (define-key map (kbd "C-c , n s") 'karma-start-no-single-run)
     (define-key map (kbd "C-c , r") 'karma-run)
     (define-key map (kbd "C-c , p") 'karma-pop-to-start-buffer)
-    (define-key map (kbd "C-c , c") 'karma-test-file-current-buffer)
+    (define-key map (kbd "C-c , c") 'karma-run-current-test)
     map)
   "The keymap used when `karma-mode' is active.")
 
