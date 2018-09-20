@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.5.0
+
+### Enhancements
+
+  * enable jumping from test file to related file
+
 ## v0.4.1
 
 ### Bug fixes
