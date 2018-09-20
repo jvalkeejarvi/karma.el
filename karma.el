@@ -3,10 +3,10 @@
 ;; Filename: karma.el
 ;; Description: karma Test Runner Emacs Integration
 ;; Author: Samuel Tonini
-;; Maintainer: Samuel Tonini
-;; URL: http://github.com/tonini/karma.el
+;; Maintainer: Juuso Valkeejärvi
+;; URL: http://github.com/jvalkeejarvi/karma.el
 ;; Version: 0.5.0
-;; Package-Requires: ((pkg-info "0.4") (emacs "24"))
+;; Package-Requires: ((pkg-info "0.4") (emacs "24.4"))
 ;; Keywords: language, javascript, js, karma, testing
 
 ;; This file is not part of GNU Emacs.
@@ -48,12 +48,14 @@
 (require 'compile)
 (require 'ansi-color)
 (require 'json)
+(require 'subr-x)
+(require 'pkg-info)
 
 (defgroup karma nil
   "Karma Test Runner Emacs Integration"
   :prefix "karma-"
   :group 'applications
-  :link '(url-link :tag "Github" "https://github.com/tonini/karma.el")
+  :link '(url-link :tag "Github" "https://github.com/jvalkeejarvi/karma.el")
   :link '(emacs-commentary-link :tag "Commentary" "karma"))
 
 (defcustom karma-config-file ".karma"
@@ -271,18 +273,18 @@ Argument BUFFER-NAME for the compilation."
 
 (defun karma-open-related-file ()
   (interactive)
+  (find-file (karma-get-related-file-name))
+  )
+
+(defun karma-get-related-file-name ()
   (let (
         (file-name (file-name-sans-extension buffer-file-name))
         (file-extension (file-name-extension buffer-file-name))
         )
-    (find-file (karma-get-related-file-name file-name file-extension))
-    )
-  )
-
-(defun karma-get-related-file-name (filename extension)
-  (if (string-suffix-p karma-spec-file-extension filename t)
-      (concat (string-remove-suffix karma-spec-file-extension filename)  "." extension)
-    (concat filename karma-spec-file-extension "." extension)
+    (if (string-suffix-p karma-spec-file-extension file-name t)
+        (concat (string-remove-suffix karma-spec-file-extension file-name)  "." file-extension)
+      (concat file-name karma-spec-file-extension "." file-extension)
+      )
     )
   )
 

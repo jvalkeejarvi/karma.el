@@ -1,6 +1,10 @@
+(source gnu)
 (source melpa)
 
-(package "karma.el" "0.5.0" "karma Test Runner Emacs Integration")
+(package-file "karma.el")
+(files "karma.el")
 
 (development
- (depends-on "f"))
+ (depends-on "f")
+ (depends-on "undercover")
+ )

@@ -57,12 +57,6 @@
   (should (equal (karma--flatten '(1 2 ("dude" "hero" (3)) 4 5))
                  '(1 2 "dude" "hero" 3 4 5))))
 
-(ert-deftest test-establish-root-directory/set-default-directory ()
-  (within-sandbox "lib/bower"
-                  (f-touch "../../bower.json")
-                  (should (equal (karma--establish-root-directory)
-                                 default-directory))))
-
 (ert-deftest test-establish-root-directory/no-root-exists ()
   (within-sandbox
    (should-error (karma--establish-root-directory))))
@@ -76,6 +70,45 @@
                  '("karma" "start" "--help")))
   (should (equal (karma--build-runner-cmdlist '("karma" "run" ""))
                  '("karma" "run"))))
+
+(ert-deftest test-karma-get-related-file ()
+  (let ((buffer-file-name "/home/user/test.file.spec.js"))
+    (should (equal (karma-get-related-file-name) "/home/user/test.file.js"))
+    )
+  (let ((buffer-file-name "/home/user/test.file.js"))
+    (should (equal (karma-get-related-file-name) "/home/user/test.file.spec.js"))
+    )
+  (let ((buffer-file-name "/home/user/test.file.ts"))
+    (should (equal (karma-get-related-file-name) "/home/user/test.file.spec.ts"))
+    )
+  )
+
+(ert-deftest test-get-current-spec ()
+  (with-temp-buffer
+    (insert "describe('test', )")
+    (should (equal (get-current-spec) "test"))
+    )
+  (with-temp-buffer
+    (insert "describe('test with spaces', )")
+    (should (equal (get-current-spec) "test with spaces"))
+    )
+  (with-temp-buffer
+    (insert "describe('test with spaces', function() {\n  it('sub test')\n  })")
+    (should (equal (get-current-spec) "sub test"))
+    )
+  (with-temp-buffer
+    (insert "describe('test with spaces', function() {\n  it('sub test not in current line', function() {)\n  var jee = 2\n}  \)")
+    (should (equal (get-current-spec) "sub test not in current line"))
+    )
+  (with-temp-buffer
+    (insert "describe('test containing \"quotes\"', )")
+    (should (equal (get-current-spec) "test containing \"quotes\""))
+    )
+  (with-temp-buffer
+    (insert "describe(\"test inside double quotes\", )")
+    (should (equal (get-current-spec) "test inside double quotes"))
+    )
+  )
 
 (provide 'karma-tests)
 

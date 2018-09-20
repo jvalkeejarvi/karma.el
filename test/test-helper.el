@@ -6,6 +6,11 @@
 (defvar karma-sandbox-path
   (f-expand "sandbox" karma-test-path))
 
+(when (require 'undercover nil t)
+  (undercover "*.el" (:report-file "/tmp/local-report.json")))
+
+(require 'karma)
+
 (defmacro within-sandbox (&optional current &rest body)
   "Evaluate BODY in an empty sandbox directory."
   `(let ((default-directory
