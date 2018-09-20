@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.4.1
+
+### Bug fixes
+
+  * don't set default-directory as persistent variable (make find-file etc. use buffer directory as context)
+  * fail getting current spec if line doesn't contain a string
+
 ## v0.4.0
 
 ### Enhancements

@@ -5,7 +5,7 @@
 ;; Author: Samuel Tonini
 ;; Maintainer: Samuel Tonini
 ;; URL: http://github.com/tonini/karma.el
-;; Version: 0.4.0
+;; Version: 0.4.1
 ;; Package-Requires: ((pkg-info "0.4") (emacs "24"))
 ;; Keywords: language, javascript, js, karma, testing
 
@@ -172,15 +172,19 @@ Argument BUFFER-NAME for the compilation."
   (let* ((karma-buffer--buffer-name buffer-name)
          (compilation-filter-start (point-min))
          (command-to-run (add-client-cmd-to-list (mapconcat 'shell-quote-argument cmdlist " ") client-cmd-list)))
-    (with-current-buffer
+    ;; (with-current-buffer
       (compilation-start command-to-run
                          'karma-buffer-mode
                          (lambda (b) karma-buffer--buffer-name))
-      (setq-local compilation-error-regexp-alist-alist
-                  (cons karma-buffer--error-link-options compilation-error-regexp-alist-alist))
-      (setq-local compilation-error-regexp-alist (cons 'karma compilation-error-regexp-alist))
-      (add-hook 'compilation-filter-hook 'karma-buffer--handle-compilation nil t)
-      (add-hook 'compilation-filter-hook 'karma-buffer--handle-compilation-once nil t))))
+      ;; (setq-local compilation-error-regexp-alist-alist
+      ;;             (cons karma-buffer--error-link-options compilation-error-regexp-alist-alist))
+      ;; (setq-local compilation-error-regexp-alist (cons 'karma compilation-error-regexp-alist))
+      ;; (add-hook 'compilation-filter-hook 'karma-buffer--handle-compilation nil t)
+      ;; (add-hook 'compilation-filter-hook 'karma-buffer--handle-compilation-once nil t)
+      )
+  (setq next-error-last-buffer (current-buffer))
+    ;; )
+  )
 
 (defun add-client-cmd-to-list (cmd &optional client-cmd-list)
   (if client-cmd-list
@@ -248,10 +252,6 @@ Argument BUFFER-NAME for the compilation."
   (interactive)
   (karma-execute (list "run" (karma-config-file-path))
                  karma-run-buffer-name))
-
-(defun karma--current-buffer-test-file-p ()
-  (string-match-p "\\\(_spec\\|_test\\)\.\\(js\\|coffee\\)$"
-                  (file-name-nondirectory (buffer-file-name))))
 
 (defun karma-execute (cmdlist buffer-name &optional client-cmd-list)
   "Run a karma command."
