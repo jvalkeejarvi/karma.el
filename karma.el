@@ -120,12 +120,12 @@
           (indicators (karma--project-root-identifier file (cdr indicators)))
           (t nil))))
 
-(defun karma--establish-root-directory ()
+(defun karma--get-root-directory ()
   "Set the default-directory to the karma used project root."
   (let ((project-root (karma-project-root)))
     (if (not project-root)
         (error "Couldn't find any project root")
-      (setq default-directory (file-name-as-directory project-root)))))
+      project-root)))
 
 (defvar karma-buffer--buffer-name nil
   "Used to store compilation name so recompilation works as expected.")
@@ -255,12 +255,13 @@ Argument BUFFER-NAME for the compilation."
 
 (defun karma-execute (cmdlist buffer-name &optional client-cmd-list)
   "Run a karma command."
-  (let ((old-directory default-directory))
-    (karma--establish-root-directory)
+  (let ((default-directory (karma--get-root-directory)))
     (message default-directory)
-    (karma-compilation-run (karma--build-runner-cmdlist (list (karma-command) cmdlist))
-                           buffer-name client-cmd-list)
-    (cd old-directory)))
+    (karma-compilation-run
+     (karma--build-runner-cmdlist (list (karma-command) cmdlist))
+     buffer-name client-cmd-list)
+    )
+  )
 
 (defun karma-pop-to-start-buffer ()
   (interactive)
