@@ -1,5 +1,5 @@
 [![License GPL 3][badge-license]](http://www.gnu.org/licenses/gpl-3.0.txt)
-[![Build Status](https://travis-ci.org/tonini/karma.el.png)](https://travis-ci.org/tonini/karma.el)
+[![Build Status](https://travis-ci.org/jvalkeejarvi/karma.el.png)](https://travis-ci.org/jvalkeejarvi/karma.el)
 [![MELPA](http://melpa.org/packages/karma-badge.svg)](http://melpa.org/#/karma)
 [![MELPA Stable](http://stable.melpa.org/packages/karma-badge.svg)](http://stable.melpa.org/#/karma)
 
@@ -112,7 +112,7 @@ Contributions are very welcome!
 ## License
 
 Copyright © 2014 Samuel Tonini and
-[contributors](https://github.com/tonini/karma.el/contributors).
+[contributors](https://github.com/jvalkeejarvi/karma.el/contributors).
 
 Distributed under the GNU General Public License, version 3
 

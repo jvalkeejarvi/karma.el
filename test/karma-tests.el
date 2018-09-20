@@ -3,8 +3,8 @@
 ;; Author: Samuel Tonini
 ;; Maintainer: Samuel Tonini
 ;; Description: karma Test Runner Emacs Integration
-;; Maintainer: Samuel Tonini
-;; URL: https://github.com/tonini/karma.el
+;; Maintainer: Juuso Valkeejärvi
+;; URL: https://github.com/jvalkeejarvi/karma.el
 
 ;; This file is NOT part of GNU Emacs.
 
