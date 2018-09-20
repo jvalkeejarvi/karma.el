@@ -1,18 +1,17 @@
-language: emacs-lisp
+language: emacs
+cache: apt
 env:
-  - EMACS=emacs24
-  - EMACS=emacs-snapshot
+  - EVM_EMACS=emacs-25.3-travis
+  - EVM_EMACS=emacs-26.1-travis
+matrix:
+  fast-finish: true
 before_install:
-  - sudo add-apt-repository -y ppa:cassou/emacs # Emacs 24.3
-  - sudo add-apt-repository -y ppa:ubuntu-elisp/ppa # Emacs snapshot
-  - sudo apt-get update
-  - sudo apt-get install -y "${EMACS}"-nox
-  - curl -fsSkL https://raw.github.com/cask/cask/master/go | python
-  - export PATH="${HOME}/.cask/bin:$PATH"
+  - curl -fsSkL https://gist.github.com/rejeep/ebcd57c3af83b049833b/raw > travis.sh && source ./travis.sh
+  - evm install $EVM_EMACS --use --skip
 install:
   - cask install
 script:
-  - make EMACS=${EMACS} build
-  - make EMACS=${EMACS} test
-  - make EMACS=${EMACS} compile
-  - make EMACS=${EMACS} test-elc
+  - echo $EMACS
+  - export CURRENT_EMACS=${EMACS:-$(which emacs)}
+  - make EMACS=${CURRENT_EMACS} info
+  - make EMACS=${CURRENT_EMACS} build
