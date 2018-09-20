@@ -1,4 +1,4 @@
-language: c
+language: emacs-lisp
 env:
   - EMACS=emacs24
   - EMACS=emacs-snapshot
@@ -13,3 +13,6 @@ install:
   - cask install
 script:
   - make EMACS=${EMACS} build
+  - make EMACS=${EMACS} test
+  - make EMACS=${EMACS} compile
+  - make EMACS=${EMACS} test-elc

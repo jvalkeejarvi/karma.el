@@ -7,7 +7,7 @@
   (f-expand "sandbox" karma-test-path))
 
 (when (require 'undercover nil t)
-  (undercover "*.el" (:report-file "/tmp/local-report.json")))
+  (undercover "*.el"))
 
 (require 'karma)
 
