@@ -211,6 +211,10 @@ Argument BUFFER-NAME for the compilation."
   (karma-execute (list "start" (karma-config-file-path) "--no-single-run")
                  karma-start-buffer-name))
 
+(defun karma-previous-spec ()
+  (interactive)
+  (re-search-backward "^\\s-*[xf]?\\(describe\\|it\\)("))
+
 (defun get-current-spec ()
   (interactive)
   (save-excursion
