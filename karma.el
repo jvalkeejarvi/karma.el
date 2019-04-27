@@ -191,9 +191,7 @@ Argument BUFFER-NAME for the compilation."
 (defun add-client-cmd-to-list (cmd &optional client-cmd-list)
   (if client-cmd-list
     (concat cmd " -- " client-cmd-list)
-    cmd
-    )
-  )
+    cmd))
 
 (defun karma-start ()
   "Run `karma start CONFIG-FILE`."
@@ -221,18 +219,11 @@ Argument BUFFER-NAME for the compilation."
     (let ((line (thing-at-point 'line t)))
       (string-match "\\(\"\\(.*\\)\"\\|'\\(.*\\)'\\)" line)
       (let ((match1 (match-string 2 line))
-            (match2 (match-string 3 line))
-            )
+            (match2 (match-string 3 line)))
         (if match1
             match1
           (if match2
-              match2
-            )
-          )
-        )
-      )
-    )
-  )
+              match2))))))
 
 (defun karma-run-current-test ()
   "Run `karma run` for current describe/it"
@@ -243,11 +234,7 @@ Argument BUFFER-NAME for the compilation."
                            (karma-config-file-path))
                      karma-run-buffer-name
                      (format "--grep=\"%s\"" current-spec))
-
-      (message "%s" (propertize "Couldn't find current it/describe" 'face '(:foreground "red")))
-      )
-    )
-  )
+      (message "%s" (propertize "Couldn't find current it/describe" 'face '(:foreground "red"))))))
 
 (defun karma-run ()
   "Run `karma run`"
@@ -261,9 +248,7 @@ Argument BUFFER-NAME for the compilation."
     (message default-directory)
     (karma-compilation-run
      (karma--build-runner-cmdlist (list (karma-command) cmdlist))
-     buffer-name client-cmd-list)
-    )
-  )
+     buffer-name client-cmd-list)))
 
 (defun karma-pop-to-start-buffer ()
   (interactive)
@@ -273,20 +258,14 @@ Argument BUFFER-NAME for the compilation."
 
 (defun karma-open-related-file ()
   (interactive)
-  (find-file (karma-get-related-file-name))
-  )
+  (find-file (karma-get-related-file-name)))
 
 (defun karma-get-related-file-name ()
-  (let (
-        (file-name (file-name-sans-extension buffer-file-name))
-        (file-extension (file-name-extension buffer-file-name))
-        )
+  (let ((file-name (file-name-sans-extension buffer-file-name))
+        (file-extension (file-name-extension buffer-file-name)))
     (if (string-suffix-p karma-spec-file-extension file-name t)
         (concat (string-remove-suffix karma-spec-file-extension file-name)  "." file-extension)
-      (concat file-name karma-spec-file-extension "." file-extension)
-      )
-    )
-  )
+      (concat file-name karma-spec-file-extension "." file-extension))))
 
 (defvar karma-mode-map
   (let ((map (make-sparse-keymap)))
