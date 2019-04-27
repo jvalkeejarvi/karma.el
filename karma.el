@@ -133,9 +133,9 @@
   "Used to store compilation name so recompilation works as expected.")
 (make-variable-buffer-local 'karma-buffer--buffer-name)
 
-(defvar karma-buffer--error-link-options
-  '(karma "\\([-A-Za-z0-9./_]+\\):\\([0-9]+\\)\\(: warning\\)?" 1 2 nil (3) 1)
-  "File link matcher for `compilation-error-regexp-alist-alist' (matches path/to/file:line).")
+;; (defvar karma-buffer--error-link-options
+;;   '(karma "\\([-A-Za-z0-9./_]+\\):\\([0-9]+\\)\\(: warning\\)?" 1 2 nil (3) 1)
+;;   "File link matcher for `compilation-error-regexp-alist-alist' (matches path/to/file:line).")
 
 (defun karma-buffer--kill-any-orphan-proc ()
   "Ensure any dangling buffer process is killed."
@@ -157,14 +157,6 @@
 (defvar karma-buffer--save-buffers-predicate
   (lambda ()
     (string-match karma-buffers-to-ask-saving-for (buffer-name)))) ;
-
-(defun karma-buffer--handle-compilation-once ()
-  (remove-hook 'compilation-filter-hook 'karma-buffer--handle-compilation-once t)
-  (delete-matching-lines "\\(-*- mode:\\|^$\\|karma run\\|Loading config\\|--no-single-run\\|Karma finished\\|Karma started\\|karma-compilation;\\)"
-                         (point-min) (point)))
-
-(defun karma-buffer--handle-compilation ()
-  (ansi-color-apply-on-region (point-min) (point-max)))
 
 (defun karma-compilation-run (cmdlist buffer-name &optional client-cmd-list)
   "Run CMDLIST in `buffer-name'.
