@@ -166,19 +166,10 @@ Argument BUFFER-NAME for the compilation."
   (let* ((karma-buffer--buffer-name buffer-name)
          (compilation-filter-start (point-min))
          (command-to-run (add-client-cmd-to-list (mapconcat 'shell-quote-argument cmdlist " ") client-cmd-list)))
-    ;; (with-current-buffer
-      (compilation-start command-to-run
-                         'karma-buffer-mode
-                         (lambda (b) karma-buffer--buffer-name))
-      ;; (setq-local compilation-error-regexp-alist-alist
-      ;;             (cons karma-buffer--error-link-options compilation-error-regexp-alist-alist))
-      ;; (setq-local compilation-error-regexp-alist (cons 'karma compilation-error-regexp-alist))
-      ;; (add-hook 'compilation-filter-hook 'karma-buffer--handle-compilation nil t)
-      ;; (add-hook 'compilation-filter-hook 'karma-buffer--handle-compilation-once nil t)
-      )
-  (setq next-error-last-buffer (current-buffer))
-    ;; )
-  )
+    (compilation-start command-to-run
+                       'karma-buffer-mode
+                       (lambda (b) karma-buffer--buffer-name)))
+  (setq next-error-last-buffer (current-buffer)))
 
 (defun add-client-cmd-to-list (cmd &optional client-cmd-list)
   (if client-cmd-list
