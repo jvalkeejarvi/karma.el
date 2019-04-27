@@ -318,6 +318,7 @@ Key bindings:
 (add-hook 'js-mode-hook 'karma-mode-hook)
 (add-hook 'js2-mode-hook 'karma-mode-hook)
 (add-hook 'coffee-mode-hook 'karma-mode-hook)
+(add-hook 'typescript-mode-hook 'karma-mode-hook)
 
 (provide 'karma)
 
