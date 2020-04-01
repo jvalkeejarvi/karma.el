@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.6.0
+
+### Enhancements
+
+  * enable running tests in current file
+
 ## v0.5.0
 
 ### Enhancements
