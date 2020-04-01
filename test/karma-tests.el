@@ -111,6 +111,33 @@
     )
   )
 
+(ert-deftest test-get-first-describe ()
+  (with-temp-buffer
+    (insert "describe('test', )")
+    (should (equal (get-first-describe) "test"))
+    )
+  (with-temp-buffer
+    (insert "describe('test with spaces', )")
+    (should (equal (get-first-describe) "test with spaces"))
+    )
+  (with-temp-buffer
+    (insert "describe('test with spaces', function() {\n  describe('sub test')\n  })")
+    (should (equal (get-first-describe) "test with spaces"))
+    )
+  (with-temp-buffer
+    (insert "describe('first describe', function() {\n  describe('sub test not in current line', function() {)\n  var jee = 2\n}  \)")
+    (should (equal (get-first-describe) "first describe"))
+    )
+  (with-temp-buffer
+    (insert "describe('test containing \"quotes\"', )")
+    (should (equal (get-first-describe) "test containing \"quotes\""))
+    )
+  (with-temp-buffer
+    (insert "describe(\"test inside double quotes\", )")
+    (should (equal (get-first-describe) "test inside double quotes"))
+    )
+  )
+
 (provide 'karma-tests)
 
 ;;; karma-tests.el ends here

@@ -203,25 +203,45 @@ Argument BUFFER-NAME for the compilation."
   (save-excursion
     (end-of-line)
     (re-search-backward "^\\s-*[xf]?\\(describe\\|it\\)(")
-    (let ((line (thing-at-point 'line t)))
-      (string-match "\\(\"\\(.*\\)\"\\|'\\(.*\\)'\\)" line)
-      (let ((match1 (match-string 2 line))
-            (match2 (match-string 3 line)))
-        (if match1
-            match1
-          (if match2
-              match2))))))
+    (get-block-description)))
+
+(defun get-block-description()
+  (let ((line (thing-at-point 'line t)))
+    (string-match "\\(\"\\(.*\\)\"\\|'\\(.*\\)'\\)" line)
+    (let ((match1 (match-string 2 line))
+          (match2 (match-string 3 line))
+          )
+      (if match1
+          match1
+        (if match2
+            match2)))))
+
+(defun get-first-describe ()
+  (interactive)
+  (save-excursion
+    (beginning-of-buffer)
+    (re-search-forward "^\\s-*[xf]?\\(describe\\)(")
+    (get-block-description)))
 
 (defun karma-run-current-test ()
   "Run `karma run` for current describe/it"
   (interactive)
   (let ((current-spec (get-current-spec)))
-    (if current-spec
+    (karma-run-grep current-spec "Couldn't find current it/describe")))
+
+(defun karma-run-file ()
+  "Run `karma run` for current files top level describe"
+  (interactive)
+  (let ((first-describe (get-first-describe)))
+    (karma-run-grep first-describe "Couldn't find describe block in file")))
+
+(defun karma-run-grep (pattern error-message)
+  (if pattern
       (karma-execute (list "run"
                            (karma-config-file-path))
                      karma-run-buffer-name
-                     (format "--grep=\"%s\"" current-spec))
-      (message "%s" (propertize "Couldn't find current it/describe" 'face '(:foreground "red"))))))
+                     (format "--grep=\"%s\"" pattern))
+    (message "%s" (propertize error-message 'face '(:foreground "red")))))
 
 (defun karma-run ()
   "Run `karma run`"
@@ -262,6 +282,7 @@ Argument BUFFER-NAME for the compilation."
     (define-key map (kbd "C-c , r") 'karma-run)
     (define-key map (kbd "C-c , p") 'karma-pop-to-start-buffer)
     (define-key map (kbd "C-c , c") 'karma-run-current-test)
+    (define-key map (kbd "C-c , f") 'karma-run-file)
     (define-key map (kbd "C-c , j") 'karma-open-related-file)
     map)
   "The keymap used when `karma-mode' is active.")
