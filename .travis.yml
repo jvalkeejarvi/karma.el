@@ -2,7 +2,7 @@ language: emacs
 cache: apt
 env:
   - EVM_EMACS=emacs-25.3-travis
-  - EVM_EMACS=emacs-26.1-travis
+  - EVM_EMACS=emacs-26.3-travis
 matrix:
   fast-finish: true
 before_install:
